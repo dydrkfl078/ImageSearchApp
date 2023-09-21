@@ -2,6 +2,7 @@ package com.example.imagesearchapp.ui.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.imagesearchapp.data.model.SearchResponse
@@ -11,7 +12,8 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class ImageSearchViewModel(
-    private val imageSearchRepository: ImageSearchRepository
+    private val imageSearchRepository: ImageSearchRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     // API
@@ -25,5 +27,19 @@ class ImageSearchViewModel(
                 _searchResult.postValue(body)
             }
         }
+    }
+    // savedState
+    var query = String()
+        set(value) {
+            field = value
+            savedStateHandle.set(SAVE_STATE_KEY, value)
+        }
+
+    init {
+        query = savedStateHandle.get<String>(SAVE_STATE_KEY) ?: ""
+    }
+
+    companion object {
+        private const val SAVE_STATE_KEY = "query"
     }
 }

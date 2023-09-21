@@ -16,6 +16,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/imagesearch_nav_host_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/imagesearch_nav_graph"
+            />
+
     </FrameLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView

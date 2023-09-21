@@ -63,6 +63,9 @@ class SearchFragment : Fragment() {
         var startTime = System.currentTimeMillis()
         var endTime: Long
 
+        binding.searchFragEditSearch.text =
+            Editable.Factory.getInstance().newEditable(imageSearchViewModel.query)
+
         binding.searchFragEditSearch.addTextChangedListener {text: Editable? ->
             endTime = System.currentTimeMillis()
             if (endTime - startTime >= SEARCH_IMAGES_TIME_DELAY) {
@@ -71,7 +74,6 @@ class SearchFragment : Fragment() {
                     if (query.isNotEmpty()) {
                         imageSearchViewModel.searchImages(query)
                         Log.d("TAG", "searchImages: ${imageSearchViewModel.searchImages(query)}")
-                        Log.d("TAG", "searchImages: ")
                     }
                 }
             }

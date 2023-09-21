@@ -3,6 +3,9 @@ package com.example.imagesearchapp.ui.view
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.setupWithNavController
 import com.example.imagesearchapp.R
 import com.example.imagesearchapp.data.repository.ImageSearchRepository
 import com.example.imagesearchapp.data.repository.ImageSearchRepositoryImpl
@@ -14,47 +17,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     lateinit var imageSearchViewModel: ImageSearchViewModel
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setupBottomNavigationView()
-        if (savedInstanceState == null){
-            binding.bottomNavigationView.selectedItemId = R.id.bottom_btn_search
-        }
+        setupNavigation()
 
         val imageSearchRepository = ImageSearchRepositoryImpl()
-        val factory = ImageSearchViewModelProviderFactory(imageSearchRepository)
+        val factory = ImageSearchViewModelProviderFactory(imageSearchRepository, this)
         imageSearchViewModel = ViewModelProvider(this,factory)[ImageSearchViewModel::class.java]
     }
-
-    private fun setupBottomNavigationView() {
-        binding.bottomNavigationView.setOnItemSelectedListener {
-            when (it.itemId) {
-                R.id.bottom_btn_search -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frameLayout, SearchFragment())
-                        .commit()
-                    true
-                }
-                R.id.bottom_btn_favorite -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frameLayout, FavoriteFragment())
-                        .commit()
-                    true
-                }
-                R.id.bottom_btn_settings -> {
-                    supportFragmentManager.beginTransaction()
-                        .replace(R.id.main_frameLayout, SettingsFragment())
-                        .commit()
-                    true
-                }
-                else -> false
-
-            }
-        }
-
+    private fun setupNavigation() {
+        val host = supportFragmentManager
+            .findFragmentById(R.id.imagesearch_nav_host_fragment) as NavHostFragment ?: return
+        navController = host.navController
+        binding.bottomNavigationView.setupWithNavController(navController)
     }
+
 }
