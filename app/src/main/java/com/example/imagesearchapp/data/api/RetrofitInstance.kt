@@ -1,11 +1,11 @@
-package com.example.imagesearchapp.util
+package com.example.imagesearchapp.data.api
 
 import com.example.imagesearchapp.BuildConfig
+import com.example.imagesearchapp.util.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.create
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitInstance {
@@ -29,11 +29,11 @@ object RetrofitInstance {
     private val imageRetrofit: Retrofit by lazy {
         Retrofit.Builder()
         .baseUrl(Constants.BASE_URL)
-        .addConverterFactory(GsonConverterFactory.create())
+        .addConverterFactory(MoshiConverterFactory.create())
         .client(okHttpClient)
         .build()
     }
-    val imageSearchApi: ImageSearchInterface by lazy {
-        imageRetrofit.create(imageSearchApi::class.java)
+    val api: ImageSearchInterface by lazy {
+        imageRetrofit.create(ImageSearchInterface::class.java)
     }
 }
